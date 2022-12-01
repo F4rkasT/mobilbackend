@@ -3,6 +3,21 @@ var cors = require('cors')
 const app = express()
 const port = 3000
 
+var mysql = require('mysql')
+    var connection
+    
+    function kapcsolat () {
+      connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'konyvtarbl'
+      })
+      connection.connect()
+    }
+    
+    
+
 app.use(cors())
 
 app.use(express.static('kepek'))
@@ -16,16 +31,8 @@ app.get('/', (req, res) => {
 
 
 app.get('/kotelezo', (req, res) => {
-
-    var mysql = require('mysql')
-    var connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'konyvtarbl'
-    })
     
-    connection.connect()
+    kapcsolat()
     
     connection.query('SELECT * FROM `konyv` INNER JOIN iro ON konyv.konyv_iro = iro.iro_id INNER JOIN mufaj ON mufaj.mufaj_id = konyv.konyv_mufaj WHERE kotelezo = 1', function (err, rows, fields) {
       if (err) throw err
