@@ -66,9 +66,8 @@ app.get('/kotelezo', (req, res) => {
   })
 
   app.post('/osszeskereso', (req, res) => {
-    
     kapcsolat()
-    let parancs = 'SELECT * FROM konyv_profil WHERE konyv_cime LIKE "%'+req.body.bevitel1+'%"'
+    let parancs = 'SELECT * FROM `konyv_profil` INNER JOIN iro_profil ON iro_profil.iro_id = konyv_profil.iro_id INNER JOIN mufaj ON konyv_profil.mufaj1 = mufaj.mufaj_id WHERE iro_profil.iro_neve LIKE "%'+req.body.bevitel1+'%%" OR mufaj.mufaj_nev LIKE "%'+req.body.bevitel1+'%%" OR konyv_profil.konyv_cime LIKE "%'+req.body.bevitel1+'%%"'
     connection.query(parancs, function (err, rows, fields) {
       if (err) throw err
     
@@ -77,11 +76,9 @@ app.get('/kotelezo', (req, res) => {
     })
     
     connection.end()
-
-
+  
+  
   })
-
-
   
 
   app.post('/kereso', (req, res) => {
